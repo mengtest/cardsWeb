@@ -1,0 +1,124 @@
+*{
+    margin:0px;
+    padding:0px;
+}
+body,html{
+    width:100%;
+    height:100%;
+    background:#1d1f21;
+    color:#2bbc8a;
+    font: normal 100% Helvetica, Arial, sans-serif;
+}
+a{
+    color:#2bbc8a;;
+    font-size:20px;
+}
+a:link{ 
+    text-decoration: none;
+    color:#2bbc8a;;
+}
+a:visited { 
+text-decoration: none;
+color: #2bbc8a;;
+}
+header{
+    text-align:center;
+    text-shadow:2px 2px 2px green;
+    font-size:30px;
+    color:#2bbc8a;
+    margin:10px;
+
+}
+nav{
+    width:50%;
+    height:30px;
+    margin:20px auto;
+    overflow:hidden;
+}
+nav input{
+    width:20%;
+    height:100%;
+    color:#2bbc8a;
+    border:none;
+    color:white;
+    font-size:100%;
+}
+nav input[type="reset"]{
+    background:#435a6b;
+    float:right;
+}
+nav input[type="submit"]{
+    background:#2bbc8a;
+    float:left;
+}
+/* 卡牌属性 */
+article{
+    width:70%;
+    margin:20px auto 0;
+}
+ul{
+    display:flex;
+    flex-wrap:wrap;
+}
+.item{
+    list-style: none;
+    flex:0 0 25%;
+}
+.imgwrap{
+    width:50%;
+    border:5px solid #2bbc8a;
+    border-radius:10px;
+    margin:0 auto 30px;
+    animation:send 1s ease backwards;
+}
+.imgwrap:hover{
+    box-shadow:1px 1px 10px 5px white;
+    color:white;
+}
+.img{
+    width:100%;
+    padding-top:calc(100% * 4/3);
+    background-size:100% 100%;
+    box-shadow:0 1px 2px rgba(0,0,0,2);
+}
+.imgtitle{
+    text-align:center;
+    font-size:15px;
+}
+
+@keyframes send{
+    from{
+        transform:rotateY(0deg);
+    }
+    to{
+        transform:rotateY(360deg);
+    }
+} 
+@media screen and (max-width: 800px) {
+    .imgtitle{
+        font-size:10px;
+    }
+    input{
+        font-size:10px;
+    }
+    article{
+        width:100%;
+    }
+    .imgwrap{
+        width:80%;
+    }
+    input[type=submit]{
+        background:#2bbc8a;
+        border:none;
+        width:80px;
+        height:30px;
+        color:whitesmoke;
+    }
+    input[type=reset]{
+        background:#435a6b;
+        border:none;
+        width:80px;
+        height:30px;
+        color:whitesmoke;
+    }
+}

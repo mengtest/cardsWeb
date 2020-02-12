@@ -1,0 +1,9 @@
+<?php
+$str = 'hello123world';
+$pattern = '/^.+?(\d+).+$/';
+$result=[];
+$ret = preg_match($pattern,$str,$result);
+var_dump($ret);
+var_dump($result);
+
+?>

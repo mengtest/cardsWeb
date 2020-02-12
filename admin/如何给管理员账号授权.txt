@@ -1,0 +1,115 @@
+线上的时候：
+
+1.要修改root密码
+
+2.不要用root用户连接数据库
+
+正常线上项目一个mysql可能会跑好几个项目，每个项目对应一个数据库，不同的数据库要对应不同的用户，并且权限也不一样。 
+
+例如：你有两个项目，一个博客项目，一个商城项目。
+
+博客项目需要一个用户，商城项目也需要创建一个用户。这样就算博客项目的用户丢了，也不回影响的商城项目。并且博客项目用户的权限仅仅是连接博客的数据库。没有权限连接商城的数据库
+
+0.查看当前有多少用户：
+
+数据库用户信息存在mysql数据库的user表中。
+
+    show database;
+
+    use mysql;
+
+    show tables;
+
+    desc user;
+
+    select Host,User,authentication_string from user;
+
+1.创建用户：
+
+create user 用户名 @'IP地址' identified by '密码'
+
+例如:create user  'blog' @'%' identified by '123456';
+
+%是通配符，表示可以通过任意ip地址以该用户来连接数据库。
+
+mysql -u 用户名 -h 数据库所在服务器ip -p 连接远程的数据库
+
+当不加-h 时，默认为 -h 127.0.0.1
+
+想要修改配置，只要修改user表中的配置信息即可，然后flush privilege例如:
+
+update user set host ='192.168.1.12' where user = 'blog';
+
+flush privileges;刷新权限
+
+2.给用户授权
+
+grant 权限1,权限2... on 数据库名.* to 用户名 @IP地址或者%;
+
+如果想给所有的数据库授权，就用*.*
+
+数据库名.*表示授权范围：数据库下所有的表
+
+然后flush privileges;
+
+例如:
+
+在root用户下执行：
+
+GRANT insert,update,delete,select ON blog.* TO 'blog' @'192.168.1.206';
+
+flush privileges;
+
+然后退出，用blog用户登录，show databases; 就可以看到blog数据库了。
+
+如果授权没问题，但是还是没权限，可以尝试重启cmd。
+
+如果想授权所有权限，可以写ALL 或者 ALL_PRIVILEGES
+
+3.show grants for 用户名@'IP地址';
+
+显示该用户的所有权限。
+
+4.回收权限
+
+revoke 权限1,权限2..on 数据库名.* from 用户名 @'ip';
+
+flush privileges;
+
+5.创建用户加授权一步搞定：
+
+grant 权限1,权限2 on 数据库名.* to 用户名@IP identified by 密码;
+
+flush privileges；
+
+6.删除用户
+
+drop user 用户名@'IP地址'
+
+7.修改用户密码:
+
+mysqladmin -u用户名 -p原密码 password新密码
+
+方法二：直接修改user表中的authentication_string字段
+
+update user set authentication_string = password('123456') where user =用户名
+
+password()是一个内置函数，用户将明文密码加密为密文
+
+flush privileges;
+
+5.7之前的版本authentication_string字段为password
+
+8.忘记密码
+
+首先关闭数据库
+
+mysqladmin -uroot -p shutdown 这样仍然需要密码，所以直接在任务管理器中直接关闭mysql
+
+然后，
+
+mysqld --skip-grant-table回车，表示跳过权限表,不再验证密码
+
+再打开一个窗口，输入mysql回车不需要输入用户名密码就进来了
+
+然后进入user表中修改密码即可。
